@@ -75,6 +75,14 @@ export default defineComponent({
 
   emits: ['loadstart', 'load', 'error'],
 
+  expose: [
+    'currentSrc',
+    'image',
+    'state',
+    'naturalWidth',
+    'naturalHeight',
+  ],
+
   setup (props, { emit, slots }) {
     const currentSrc = ref('') // Set from srcset
     const image = ref<HTMLImageElement>()
@@ -231,32 +239,41 @@ export default defineComponent({
       return maybeTransition(props, { appear: true }, error)
     })
 
-    useRender(() => withDirectives(
-      <VResponsive
-        class="v-img"
-        aspectRatio={ aspectRatio.value }
-        aria-label={ props.alt }
-        role={ props.alt ? 'img' : undefined }
-        v-slots={{
-          additional: () => [__image.value, __preloadImage.value, __placeholder.value, __error.value],
-          default: slots.default,
-        }}
-      />,
-      [useDirective<ObserveDirectiveBinding>(intersect, {
-        value: {
-          handler: init,
-          options: props.options,
-        },
-        modifiers: { once: true },
-      })]
-    ))
-
     return {
+      aspectRatio,
       currentSrc,
       image,
       state,
       naturalWidth,
       naturalHeight,
+
+      init,
+      __image,
+      __preloadImage,
+      __placeholder,
+      __error,
     }
+  },
+
+  render () {
+    return withDirectives(
+      <VResponsive
+        class="v-img"
+        aspectRatio={ this.aspectRatio }
+        aria-label={ this.alt }
+        role={ this.alt ? 'img' : undefined }
+        v-slots={{
+          additional: () => [this.__image, this.__preloadImage, this.__placeholder, this.__error],
+          default: this.$slots.default,
+        }}
+      />,
+      [useDirective<ObserveDirectiveBinding>(intersect, {
+        value: {
+          handler: this.init,
+          options: this.options,
+        },
+        modifiers: { once: true },
+      })]
+    )
   },
 })
