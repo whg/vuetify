@@ -4,16 +4,15 @@ import { VNavigationDrawer } from '..'
 // Utilities
 import { createTheme, VuetifyThemeSymbol } from '@/composables/theme'
 import { mount } from '@vue/test-utils'
-import { VuetifySymbol } from '@/framework'
+import { createVuetify, VuetifySymbol } from '@/framework'
 
 describe('VNavigationDrawer', () => {
+  const vuetify = createVuetify()
+
   function mountFunction (options = {}) {
     return mount(VNavigationDrawer, {
       global: {
-        provide: {
-          [VuetifySymbol as symbol]: { defaults: { global: {} } },
-          [VuetifyThemeSymbol as symbol]: createTheme(),
-        },
+        plugins: [vuetify],
       },
       ...options,
     })

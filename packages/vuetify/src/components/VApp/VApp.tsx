@@ -7,7 +7,7 @@ import makeProps from '@/util/makeProps'
 
 // Composables
 import { useTheme } from '@/composables/theme'
-import { createLayout, makeLayoutProps } from '@/composables/layout'
+import { provideLayout, makeLayoutProps } from '@/composables/layout'
 
 export default defineComponent({
   name: 'VApp',
@@ -19,7 +19,7 @@ export default defineComponent({
 
   setup (props, { slots }) {
     const { themeClasses } = useTheme()
-    const { layoutClasses } = createLayout(props)
+    const { layoutClasses } = provideLayout(props)
 
     return () => (
       <div class={['v-application', themeClasses.value, layoutClasses.value]} data-app="true">

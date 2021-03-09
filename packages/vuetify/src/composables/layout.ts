@@ -102,8 +102,7 @@ const generateLayers = (
   return layers
 }
 
-// TODO: Remove undefined from layout and overlaps when vue typing for required: true prop is fixed
-export function createLayout (props: { layout?: string[], overlaps?: string[] }) {
+export function createLayout (props?: { overlaps?: string[] }) {
   const registered = ref<string[]>([])
   const positions = new Map<string, Ref<Position>>()
   const amounts = new Map<string, Ref<number | string>>()
@@ -111,7 +110,7 @@ export function createLayout (props: { layout?: string[], overlaps?: string[] })
 
   const computedOverlaps = computed(() => {
     const map = new Map<string, { position: Position, amount: number }>()
-    const overlaps = props.overlaps ?? []
+    const overlaps = props?.overlaps ?? []
     for (const overlap of overlaps.filter(item => item.includes(':'))) {
       const [top, bottom] = overlap.split(':')
       if (!registered.value.includes(top) || !registered.value.includes(bottom)) continue
@@ -165,55 +164,59 @@ export function createLayout (props: { layout?: string[], overlaps?: string[] })
     return items.value.find(item => item.id === id)
   }
 
-  provide(VuetifyLayoutKey, {
-    register: (id: string, priority: Ref<number>, position: Ref<Position>, amount: Ref<number | string>) => {
-      priorities.set(id, priority)
-      positions.set(id, position)
-      amounts.set(id, amount)
-      registered.value.push(id)
+  const register = (id: string, priority: Ref<number>, position: Ref<Position>, amount: Ref<number | string>) => {
+    priorities.set(id, priority)
+    positions.set(id, position)
+    amounts.set(id, amount)
+    registered.value.push(id)
 
-      return computed(() => {
-        const index = items.value.findIndex(i => i.id === id)
+    return computed(() => {
+      const index = items.value.findIndex(i => i.id === id)
 
-        if (index < 0) throw new Error(`Layout item "${id}" is missing from layout prop`)
+      if (index < 0) throw new Error(`Layout item "${id}" is missing from layout prop`)
 
-        const item = items.value[index]
+      const item = items.value[index]
 
-        if (!item) throw new Error(`Could not find layout item "${id}`)
+      if (!item) throw new Error(`Could not find layout item "${id}`)
 
-        const overlap = computedOverlaps.value.get(id)
-        if (overlap) {
-          item[overlap.position] += overlap.amount
-        }
+      const overlap = computedOverlaps.value.get(id)
+      if (overlap) {
+        item[overlap.position] += overlap.amount
+      }
 
-        const isHorizontal = position.value === 'left' || position.value === 'right'
-        const isOpposite = position.value === 'right'
+      const isHorizontal = position.value === 'left' || position.value === 'right'
+      const isOpposite = position.value === 'right'
 
-        const amount = amounts.get(id)
+      const amount = amounts.get(id)
 
-        return {
-          [position.value]: 0,
-          height: isHorizontal ? `calc(100% - ${item.top}px - ${item.bottom}px)` : `${amount?.value ?? 0}px`,
-          marginLeft: isOpposite ? undefined : `${item.left}px`,
-          marginRight: isOpposite ? `${item.right}px` : undefined,
-          marginTop: position.value !== 'bottom' ? `${item.top}px` : undefined,
-          marginBottom: position.value !== 'top' ? `${item.bottom}px` : undefined,
-          position: 'absolute',
-          width: !isHorizontal ? `calc(100% - ${item.left}px - ${item.right}px)` : `${amount?.value ?? 0}px`,
-          zIndex: layers.value.length - index,
-        }
-      })
-    },
-    unregister: (id: string) => {
-      positions.delete(id)
-      amounts.delete(id)
-      priorities.delete(id)
-      registered.value = registered.value.filter(v => v !== id)
-    },
-    mainStyles,
-    getLayoutItem,
-    items,
-  })
+      return {
+        [position.value]: 0,
+        height: isHorizontal ? `calc(100% - ${item.top}px - ${item.bottom}px)` : `${amount?.value ?? 0}px`,
+        marginLeft: isOpposite ? undefined : `${item.left}px`,
+        marginRight: isOpposite ? `${item.right}px` : undefined,
+        marginTop: position.value !== 'bottom' ? `${item.top}px` : undefined,
+        marginBottom: position.value !== 'top' ? `${item.bottom}px` : undefined,
+        position: 'absolute',
+        width: !isHorizontal ? `calc(100% - ${item.left}px - ${item.right}px)` : `${amount?.value ?? 0}px`,
+        zIndex: layers.value.length - index,
+      }
+    })
+  }
 
-  return { layoutClasses: ref('v-layout'), getLayoutItem, items }
+  const unregister = (id: string) => {
+    positions.delete(id)
+    amounts.delete(id)
+    priorities.delete(id)
+    registered.value = registered.value.filter(v => v !== id)
+  }
+
+  return { layoutClasses: ref('v-layout'), getLayoutItem, items, register, unregister, mainStyles }
+}
+
+export function provideLayout (props: { overlaps?: string[] }) {
+  const layout = createLayout(props)
+
+  provide(VuetifyLayoutKey, layout)
+
+  return layout
 }

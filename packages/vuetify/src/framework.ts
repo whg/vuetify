@@ -1,6 +1,7 @@
 import { inject } from 'vue'
 import { createTheme, VuetifyThemeSymbol } from './composables/theme'
 import { defaultSets, VuetifyIconSymbol } from '@/composables/icons'
+import { createLayout, VuetifyLayoutKey } from './composables/layout'
 import { mergeDeep } from './util'
 import { aliases, mdi } from '@/iconsets/mdi'
 
@@ -76,6 +77,7 @@ export const createVuetify = (options: VuetifyOptions = {}) => {
       },
       aliases,
     }, icons))
+    app.provide(VuetifyLayoutKey, createLayout())
     app.config.globalProperties.$vuetify = vuetify
   }
 

@@ -7,7 +7,7 @@ import { useRender } from '@/util/useRender'
 import makeProps from '@/util/makeProps'
 
 // Composables
-import { createLayout, makeLayoutProps } from '@/composables/layout'
+import { provideLayout, makeLayoutProps } from '@/composables/layout'
 
 export default defineComponent({
   name: 'VLayout',
@@ -15,7 +15,7 @@ export default defineComponent({
   props: makeProps(makeLayoutProps()),
 
   setup (props, { slots }) {
-    const { layoutClasses, getLayoutItem, items } = createLayout(props)
+    const { layoutClasses, getLayoutItem, items } = provideLayout(props)
 
     useRender(() => (
       <div
