@@ -14,7 +14,7 @@ exports[`VNavigationDrawer should render image when using src prop 1`] = `
      style="left: 0px; margin-left: 0px; margin-top: 0px; margin-bottom: 0px; position: absolute; width: 256px; z-index: 2; transform: translateX(0%);"
 >
   <div class="v-navigation-drawer__img">
-    <img src="foo.png"
+    <img src="http://example.com/foo.png"
          alt
     >
   </div>

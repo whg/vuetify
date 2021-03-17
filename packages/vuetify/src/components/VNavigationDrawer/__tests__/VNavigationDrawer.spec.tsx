@@ -43,7 +43,7 @@ describe('VNavigationDrawer', () => {
   })
 
   it('should render image when using src prop', () => {
-    const wrapper = mountFunction({ src: 'foo.png' })
+    const wrapper = mountFunction({ src: 'http://example.com/foo.png' })
 
     expect(wrapper.html()).toMatchSnapshot()
   })
