@@ -6,7 +6,7 @@ import { VNavigationDrawer } from '..'
 import { createVuetify } from '@/framework'
 import { mount } from '@vue/test-utils'
 
-describe('VNavigationDrawer', () => {
+describe.skip('VNavigationDrawer', () => {
   const vuetify = createVuetify()
 
   function mountFunction (options = {}) {
