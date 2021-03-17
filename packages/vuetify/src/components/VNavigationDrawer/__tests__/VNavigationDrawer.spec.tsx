@@ -43,10 +43,9 @@ describe('VNavigationDrawer', () => {
   })
 
   it('should render image when using src prop', () => {
-    const prop = mountFunction({ src: 'foo.png' })
+    const wrapper = mountFunction({ src: 'foo.png' })
 
-    expect(prop.find('img').exists()).toBe(true)
-    expect(prop.find('img').attributes().src).toBe('foo.png')
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it.each([
