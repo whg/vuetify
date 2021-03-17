@@ -6,6 +6,10 @@ import { VNavigationDrawer } from '..'
 import { createVuetify } from '@/framework'
 import { mount } from '@vue/test-utils'
 
+const { Canvas } = require('jsdom/lib/jsdom/utils')
+
+console.log(Canvas)
+
 describe('VNavigationDrawer', () => {
   const vuetify = createVuetify()
 
