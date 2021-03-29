@@ -19,24 +19,22 @@ export const makeDelayProps = propsFactory({
 export function useDelay (props: DelayProps, cb?: (value: boolean) => void) {
   const delays: Partial<Record<keyof DelayProps, number>> = {}
   const runDelayFactory = (prop: keyof DelayProps) => (): Promise<boolean> => {
-    // istanbul ignore next
-    if (!IN_BROWSER) return Promise.resolve(true)
-
-    const active = prop === 'openDelay'
-
-    delays.closeDelay && window.clearTimeout(delays.closeDelay)
-    delete delays.closeDelay
-
-    delays.openDelay && window.clearTimeout(delays.openDelay)
-    delete delays.openDelay
-
     return new Promise(resolve => {
-      const delay = parseInt(props[prop] ?? 0, 10)
+      // istanbul ignore next
+      if (!IN_BROWSER) return resolve(true)
+
+      const active = prop === 'openDelay'
+
+      window.clearTimeout(delays.closeDelay)
+      window.clearTimeout(delays.openDelay)
+
+      delete delays.closeDelay
+      delete delays.openDelay
 
       delays[prop] = window.setTimeout(() => {
         cb?.(active)
         resolve(active)
-      }, delay)
+      }, parseInt(props[prop] ?? 0, 10))
     })
   }
 
