@@ -49,13 +49,9 @@ export function useGroupItem (
     disabled: toRef(props, 'disabled'),
   }, props.index)
 
-  onBeforeUnmount(() => {
-    group.unregister(id)
-  })
+  onBeforeUnmount(() => group.unregister(id))
 
-  const isSelected = computed(() => {
-    return group.isSelected(id)
-  })
+  const isSelected = computed(() => group.isSelected(id))
 
   return {
     isSelected,
@@ -73,11 +69,7 @@ export function useGroup (
     props,
     'modelValue',
     [],
-    v => {
-      if (v == null) return []
-
-      return getIds(items, wrapInArray(v))
-    },
+    v => v == null ? [] : getIds(items, wrapInArray(v)),
     v => {
       const arr = getValues(items, v)
 

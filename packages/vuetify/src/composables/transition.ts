@@ -8,6 +8,6 @@ export const makeTransitionProps = propsFactory({
   transition: {
     type: [Boolean, String] as PropType<string | false>,
     default: 'fade-transition',
-    validator: val => val !== true,
+    validator: (val: any) => val !== true,
   },
 }, 'transition')

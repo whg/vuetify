@@ -1,10 +1,25 @@
+// Composables
+import { makeDimensionProps, useDimension } from '../dimensions'
+
 // Utilities
-import { useDimension } from '../dimensions'
+import { mount } from '@vue/test-utils'
 
 // Types
 import type { DimensionProps } from '../dimensions'
 
 describe('dimensions.ts', () => {
+  it('should create rounded props', () => {
+    const wrapper = mount({
+      props: makeDimensionProps(),
+      template: '<div/>',
+    }, {
+      propsData: { height: 50, minWidth: 25 },
+    })
+
+    expect(wrapper.props().height).toBeDefined()
+    expect(wrapper.props().minWidth).toBeDefined()
+  })
+
   it.each([
     [{ height: null }, {}],
     [{ height: 101 }, { height: '101px' }],

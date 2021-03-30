@@ -28,7 +28,7 @@ export const makePositionProps = propsFactory({
   left: [Boolean, Number, String],
   position: {
     type: String as PropType<Position>,
-    validator: /* istanbul ignore next */ (v: any) => positionValues.includes(v),
+    validator: (v: any) => positionValues.includes(v),
   },
   right: [Boolean, Number, String],
   top: [Boolean, Number, String],

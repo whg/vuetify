@@ -37,9 +37,7 @@ export const makeLayoutProps = propsFactory({
 
 // Composables
 export const makeLayoutItemProps = propsFactory({
-  name: {
-    type: String,
-  },
+  name: { type: String },
   priority: {
     type: Number,
     default: 0,

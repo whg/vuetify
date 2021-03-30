@@ -1,6 +1,21 @@
-import { useSize } from '../size'
+// Composables
+import { makeSizeProps, useSize } from '../size'
+
+// Utilities
+import { mount } from '@vue/test-utils'
 
 describe('size', () => {
+  it('should create rounded props', () => {
+    const wrapper = mount({
+      props: makeSizeProps(),
+      template: '<div/>',
+    }, {
+      propsData: { size: 20 },
+    })
+
+    expect(wrapper.props().size).toBeDefined()
+  })
+
   it.each([
     [{ size: 'x-small' }, 'test--size-x-small'],
     [{ size: 'small' }, 'test--size-small'],

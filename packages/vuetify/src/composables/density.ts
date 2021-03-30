@@ -10,7 +10,7 @@ const allowedDensities = ['default', 'comfortable', 'compact'] as const
 type Density = typeof allowedDensities[number]
 
 export interface DensityProps {
-  density: Density
+  density?: Density
 }
 
 // Composables

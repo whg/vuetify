@@ -3,14 +3,20 @@ import { computed } from 'vue'
 import propsFactory from '@/util/propsFactory'
 
 // Types
+import type { PropType } from 'vue'
+
+const allowedRounded = [0, true, false, '', 'sm', 'lg', 'xl', 'pill', 'circle', 'shaped'] as const
+
+type Rounded = typeof allowedRounded[number]
+
 export interface RoundedProps {
-  rounded?: boolean | string | number | null
+  rounded?: Rounded
 }
 
 // Composables
 export const makeRoundedProps = propsFactory({
   rounded: {
-    type: [Boolean, Number, String],
+    type: [Boolean, Number, String] as PropType<Rounded>,
     default: undefined,
   },
 }, 'rounded')

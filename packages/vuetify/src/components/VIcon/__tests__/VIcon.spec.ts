@@ -82,7 +82,7 @@ describe('VIcon', () => {
   })
 
   it('should render a specific size', () => {
-    const wrapper = mount(VIcon, { props: { icon: 'mdi-add', size: '112px' }, global: globalOptions })
+    const wrapper = mount(VIcon, { props: { icon: 'mdi-add', size: '112' }, global: globalOptions })
 
     expect(wrapper.element.style.fontSize).toBe('112px')
   })
