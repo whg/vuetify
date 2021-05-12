@@ -12,7 +12,9 @@ const resolve = file => require('path').resolve(__dirname, file)
 const cssLoaders = [
   // https://github.com/webpack-contrib/mini-css-extract-plugin#user-content-advanced-configuration-example
   // TODO: remove style-loader: https://github.com/webpack-contrib/mini-css-extract-plugin/issues/34
-  extractCSS ? MiniCssExtractPlugin.loader : 'style-loader',
+  extractCSS ? MiniCssExtractPlugin.loader : {
+    loader: './build/test.js',
+  },
   { loader: 'css-loader', options: { sourceMap: !isProd } },
   { loader: 'postcss-loader', options: { sourceMap: !isProd } }
 ]
